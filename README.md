@@ -49,7 +49,9 @@ pagamento para cada empregado desde a última vez em que este foi pago.
 
 2) O método `ShowEmployeeInfo()` da Classe Employee e das suas subclasses é identico até certo ponto, logo deve ser organizado.
 
-3) Os métodos de conversão de Employee, `SalariedToHourly(), ComissionedToHourly(), HourlyToSalaried(), ComissionedToSalaried()` e `SalariedToComissioned()` da classe [Employee](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/employee/Employee.java#L66)
+### Feature Envy
+
+1) Os métodos de conversão de Employee, `SalariedToHourly(), ComissionedToHourly(), HourlyToSalaried(), ComissionedToSalaried()` e `SalariedToComissioned()` da classe [Employee](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/employee/Employee.java#L66) estão mais interessados nas subclasses do que na superclasse. Esse problema também se encaixa no Code Smell Duplicated Code, pois o codigo entre esses métodos está repitido.
 
 ### Lazy Class
 
@@ -86,7 +88,7 @@ public class Input {
 
 Alguns exemplos:
 
-(Antes, arquivo [main.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java#L45))
+(Antes, arquivo [Main.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java#L45))
 ```java
 int cmd = input.nextInt();
 input.nextLine();
@@ -98,7 +100,7 @@ int cmd = Input.readInt();
 ```
 
 ---
-(Antes, arquivo [syndicate.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/syndicate/Syndicate.java#L42))
+(Antes, arquivo [Syndicate.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/syndicate/Syndicate.java#L42))
 
 ```java
 double value = input.nextDouble();
@@ -108,6 +110,53 @@ input.nextLine();
 (Depois)
 ```java
 double value =  Input.readDouble();
+```
+
+### Feature Envy
+
+1) Aqui foi aplicado o padrão "Extract Method", ou seja, as Funções foram levadas cada uma para sua respectiva Classe de interesse.
+
+(Antes)
+
+(Depois, Hourly.java)
+```java
+public Salaried toSalaried () {
+    System.out.println("Qual será o salário inicial?");
+    double salary = Input.readDouble();
+
+    return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), salary, 1);
+}
+
+public Salaried toComissioned () {
+    System.out.println("Qual será o salário inicial?");
+    double salary =  Input.readDouble();
+
+    System.out.println("Qual a taxa de comissão?");
+    double taxa =  Input.readDouble();
+
+    return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), salary, taxa);
+}
+```
+(Depois, Salaried.Java)
+```java
+public Hourly toHourly () {
+    System.out.println("Insira o valor do coeficiente salario/hora: ");
+    double hourSalary =  Input.readDouble();
+    
+    return new Hourly(this.name, this.address, this.card, this.getPaymentMethod(), hourSalary);
+}
+
+public Salaried toSalaried () {
+
+    return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), changeSalary(), 1);
+}
+
+public Salaried toComissioned () {
+    System.out.println("Qual a taxa de comissão?");
+    double taxa =  Input.readDouble();
+
+    return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), changeSalary(), taxa);
+}
 ```
 
 ### Lazy Class
