@@ -26,10 +26,10 @@ public class Input {
         double n = 0;
         while(!completed) {
             try {
-                n = input.nextInt();
+                n = input.nextDouble();
                 completed = true;
             } catch (InputMismatchException e) {
-                System.out.println("Insira um número racional!");
+                System.out.println("Insira um número racional! (Use virgula ao invés de ponto)");
             }
             input.nextLine();
         }

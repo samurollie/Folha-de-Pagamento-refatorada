@@ -57,6 +57,10 @@ pagamento para cada empregado desde a última vez em que este foi pago.
 
 1) A classe [Salaried](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Salaried.java) possui apenas uma subclasse, [Comissioned](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Comissioned.java) logo, a existência dessa subclasse não faz sentido
 
+### Speculative Generality
+
+1) 
+
 ## Solução para os Code Smells encontrados
 
 ### Duplicated Code
