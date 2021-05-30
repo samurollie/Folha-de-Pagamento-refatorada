@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.Scanner;
 
-import src.employee.Comissioned;
+import src.employee.Salaried;
 import src.employee.Employee;
 import src.employee.EmployeeList;
 import src.employee.Hourly;
@@ -120,7 +120,7 @@ public class Main {
                  
 
                 if(employees.containsId(id)) {
-                    if(!(employees.getEmployee(id) instanceof Comissioned)) {
+                    if(((Salaried)employees.getEmployee(id)).getComissionPercentage() == 1) {
                         System.out.println("O Empregado deve ser do tipo comissionado para cadastrar uma venda!");
                     } else {
                         System.out.println("Insira a data em que a venda foi realizada: DD/MM/AAAA HH:MM:SS");
@@ -135,8 +135,8 @@ public class Main {
                         System.out.println("Cadastrando venda...");
 
                         try {
-                            ((Comissioned) employees.getEmployee(id)).addSale(formatter.parse(date), value, description, id);
-                            ((Comissioned) employees.getEmployee(id)).showSales();
+                            ((Salaried) employees.getEmployee(id)).addSale(formatter.parse(date), value, description, id);
+                            ((Salaried) employees.getEmployee(id)).showSales();
                         } catch (ParseException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -255,7 +255,7 @@ public class Main {
                     if (lastAction == 1 || lastAction == 2 || lastAction == 3 || lastAction == 4 || lastAction == 6) {
                         System.out.println("Employees antes: " + EmployeeList.size);
                         employees.showAll();
-
+ 
                         System.out.println("A lista la do historico:");
                         EmployeeList temp = historic.undoEmployeeList();
                         temp.showAll();

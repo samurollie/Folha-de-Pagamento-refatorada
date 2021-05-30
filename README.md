@@ -45,15 +45,19 @@ pagamento para cada empregado desde a última vez em que este foi pago.
 
 ### Duplicated Code
 
-1) Na classe Main, assim como nas classes Employee, EmployeeList, Salaried, Syndicate e SyndicateList, toda vez que um número (Inteiro,double, etc) é lido logo após uma String será lida, o método nextLine() é chamado para a limpeza do buff e a correta leitura da String
+1) Na classe [Main](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java), assim como nas classes Employee, EmployeeList, Salaried, Syndicate e SyndicateList, toda vez que um número (Inteiro,double, etc) é lido logo após uma String será lida, o método `nextLine()` é chamado para a limpeza do buff e a correta leitura da String.
 
-*
+2) O método `ShowEmployeeInfo()` da Classe Employee e das suas subclasses é identico até certo ponto, logo deve ser organizado.
+
+### Lazy Class
+
+1) A classe [Salaried](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Salaried.java) possui apenas uma subclasse, [Comissioned](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Comissioned.java) logo, a existência dessa subclasse não faz sentido
 
 ## Solução para os Code Smells encontrados
 
 ### Duplicated Code
 
-Para o problema de leitura, foi criada a Classe Input (ADICIONAR LINK), esta classe contém metodos com o código que antes estava duplicado:
+1) Para o problema de leitura, foi criada a Classe [Input](https://github.com/samurollie/Folha-de-Pagamento-refatorada/blob/main/src/utilities/Input.java), utilizando o Padrão "Extract Method":
 
 ```java
 public class Input {
@@ -80,7 +84,7 @@ public class Input {
 
 Alguns exemplos:
 
-(Antes, arquivo main.java linhas 45 e 46)
+(Antes, arquivo [main.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java#L45))
 ```java
 int cmd = input.nextInt();
 input.nextLine();
@@ -92,7 +96,7 @@ int cmd = Input.readInt();
 ```
 
 ---
-(Antes, arquivo syndicate.java, linhas 42 e 43)
+(Antes, arquivo [syndicate.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/syndicate/Syndicate.java#L42))
 
 ```java
 double value = input.nextDouble();
@@ -103,3 +107,90 @@ input.nextLine();
 ```java
 double value =  Input.readDouble();
 ```
+
+### Lazy Class
+
+1) As classes foram unidas, tornando-se uma só:
+
+(Antes: [Salaried](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Salaried.java) e [Comissioned](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Comissioned.java))
+
+(Depois) 
+```java
+package src.employee;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import src.utilities.Sale;
+
+public class Salaried extends Employee{
+    private double salary;
+    private double comissionPercentage;
+    private ArrayList<Sale> sales = new ArrayList<Sale>();
+
+    public Salaried(String name, String adress, int card, int paymentMethod, double salary, double comissionPercentage) {
+        super(name, adress, card, paymentMethod);
+        this.setSalary(salary);
+        this.comissionPercentage = comissionPercentage;
+    }
+
+    public void addSale(Date date, double value, String description, int employeeId) {
+        Sale sale = new Sale(date, value, description, employeeId); 
+        this.sales.add(sale);
+    }
+
+    public void showSales() {
+        System.out.println("Exibindo as vendas feitas por " + this.name);
+        System.out.println("Porcentagem de comissão: " + comissionPercentage + "%");
+        for (Sale sale : sales) {
+            System.out.println("\n-----------------------\n");
+            System.out.println("Data: " + sale.date);
+            System.out.println("Descrição: " + sale.description);
+            System.out.println("Valor: " + sale.value);
+        }
+    }
+
+    public double getComissionPercentage() {
+        return comissionPercentage;
+    }
+
+    public void setComissionPercentage(double comissionPercentage) {
+        this.comissionPercentage = comissionPercentage;
+    }
+
+    public boolean hasSales() {
+        return !sales.isEmpty();
+    }
+
+    public ArrayList<Sale> getSales() {
+        return this.sales;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+    
+    private String getType() {
+        return (this.comissionPercentage == 1) ? "Salariado" : "Comissionado";
+    }
+
+    @Override
+    public String showEmployeeInfo() {
+        return "----------\n"+ 
+        "Nome:" + this.name + 
+        "\nEndereço:" + this.address + 
+        "\nCard:" + this.card + 
+        "\nMétodo de pagamento:" + this.paymentMethod + 
+        "\nTipo: " + this.getType() +
+        "\nSalario:" + this.salary +
+        "\nPorcentagem de Comissão: " + this.comissionPercentage + "(" + this.getType() + ")" +
+        "\n----------";
+    }
+}
+
+```
+

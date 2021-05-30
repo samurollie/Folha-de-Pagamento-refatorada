@@ -77,7 +77,7 @@ public class Employee {
         return new Hourly(employee.name, employee.address, employee.card, method, hourSalary);
     }
 
-    public Hourly ComissionedToHourly (Comissioned employee) {
+    public Hourly ComissionedToHourly (Salaried employee) {
         System.out.println("Insira o valor do coeficiente salario/hora: ");
         double hourSalary =  Input.readDouble();
         int method;
@@ -104,10 +104,10 @@ public class Employee {
             method = 3;
         }
 
-        return new Salaried(employee.name, employee.address, employee.card, method, salary);
+        return new Salaried(employee.name, employee.address, employee.card, method, salary, 1);
     }
 
-    public Salaried ComissionedToSalaried (Comissioned employee) {
+    public Salaried ComissionedToSalaried (Salaried employee) {
         System.out.println("O salário atual é: " + employee.getSalary() + " deseja manter?");
         System.out.println("(1) - Sim");
         System.out.println("(2) - Não");
@@ -129,10 +129,10 @@ public class Employee {
             method = 3;
         }
 
-        return new Salaried(employee.name, employee.address, employee.card, method, newSalary);
+        return new Salaried(employee.name, employee.address, employee.card, method, newSalary, 1);
     }
 
-    public Comissioned SalariedToComissioned (Salaried employee) {
+    public Salaried SalariedToComissioned (Salaried employee) {
         System.out.println("O salário atual é: " + employee.getSalary() + " deseja manter?");
         System.out.println("(1) - Sim");
         System.out.println("(2) - Não");
@@ -157,10 +157,10 @@ public class Employee {
         System.out.println("Qual a taxa de comissão?");
         double taxa =  Input.readDouble();
 
-        return new Comissioned(employee.name, employee.address, employee.card, method, newSalary, taxa);
+        return new Salaried(employee.name, employee.address, employee.card, method, newSalary, taxa);
     }
 
-    public Comissioned HourlyToComissioned (Hourly employee) {
+    public Salaried HourlyToComissioned (Hourly employee) {
         System.out.println("Qual será o salário inicial?");
         double salary =  Input.readDouble();
         int method;
@@ -174,6 +174,6 @@ public class Employee {
 
         System.out.println("Qual a taxa de comissão?");
         double taxa =  Input.readDouble();
-        return new Comissioned(employee.name, employee.address, employee.card, method, salary, taxa);
+        return new Salaried(employee.name, employee.address, employee.card, method, salary, taxa);
     }
 }

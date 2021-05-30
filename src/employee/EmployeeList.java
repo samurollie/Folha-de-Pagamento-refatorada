@@ -1,14 +1,11 @@
 package src.employee;
 
-import java.util.Scanner;
-
 import src.utilities.Input;
 import src.utilities.Sale;
 
 public class EmployeeList {
     private Employee employees[];
     private int maxCapacity;
-    private Scanner input = new Scanner(System.in);
     public static int size;
 
     public EmployeeList(int maxCapacity) {
@@ -31,20 +28,17 @@ public class EmployeeList {
 
                 newList.employees[i] = new Hourly(aux.name, aux.address, aux.card, aux.getPaymentMethod(), aux.getHourSalary());
 
-            } else if (employeeList.employees[i] instanceof Comissioned) {
-                Comissioned aux = (Comissioned)employeeList.employees[i];
-
-                newList.employees[i] = new Comissioned(aux.name, aux.address, aux.card, aux.getPaymentMethod(), aux.getSalary(), aux.getComissionPercentage());
-
-                if (aux.hasSales()) {
-                    for (Sale sale : aux.getSales()) {
-                        ((Comissioned)newList.employees[i]).addSale(sale.date, sale.value, sale.description, sale.employeeId);
-                    }
-                }
             } else {
                 Salaried aux = (Salaried)employeeList.employees[i];
 
-                newList.employees[i] = new Salaried(aux.name, aux.address, aux.card, aux.getPaymentMethod(), aux.getSalary());
+                newList.employees[i] = new Salaried(aux.name, aux.address, aux.card, aux.getPaymentMethod(), aux.getSalary(), aux.getComissionPercentage());
+                
+                if (aux.hasSales()) {
+                    for (Sale sale : aux.getSales()) {
+                        ((Salaried)newList.employees[i]).addSale(sale.date, sale.value, sale.description, sale.employeeId);
+                    }
+                }
+            
             }
         }
         EmployeeList.size = oldSize;
@@ -105,14 +99,14 @@ public class EmployeeList {
             
             System.out.println("Qual será o salário inicial?");
             double salary =  Input.readDouble();
+            double taxa = 1;
             
             if (comissioned == 1) {
                 System.out.println("Qual a taxa de comissão?");
-                double taxa =  Input.readDouble();
-                this.employees[id] = new Comissioned(name, address, id, payment, salary, taxa);
-            } else {
-                this.employees[id] = new Salaried(name, address, id, payment, salary);
+                taxa = Input.readDouble();
             }
+            
+            this.employees[id] = new Salaried(name, address, id, payment, salary, taxa);
         }
 
         System.out.println("Adicionando empregado " + id);
@@ -138,17 +132,29 @@ public class EmployeeList {
         
         if (employees[id] instanceof Salaried) {
             Salaried employee = (Salaried) employees[id];
-            
-            System.out.println("(1) - Horista");
-            System.out.println("(2) - Comissionado");
-            int op = Input.readInt();
-
-            if (op == 1) {
-                employees[id] = employees[id].SalariedToHourly(employee);
+            if (employee.getComissionPercentage() > 1) {
+                System.out.println("(1) - Salariado");
+                System.out.println("(2) - Horista");
+                int op = Input.readInt();
+    
+                if (op == 1) {
+                    employees[id] = employees[id].ComissionedToSalaried(employee);
+                } else {
+                    employees[id] = employees[id].ComissionedToHourly(employee);
+                }
             } else {
-                employees[id] = employees[id].SalariedToComissioned(employee);
+                System.out.println("(1) - Horista");
+                System.out.println("(2) - Comissionado");
+                int op = Input.readInt();
+                
+                if (op == 1) {
+                    employees[id] = employees[id].SalariedToHourly(employee);
+                } else {
+                    employees[id] = employees[id].SalariedToComissioned(employee);
+                }
             }
-
+            
+            
         } else if (employees[id] instanceof Hourly) {
             Hourly employee = (Hourly) employees[id];
             
@@ -160,18 +166,6 @@ public class EmployeeList {
                 employees[id] = employees[id].HourlyToSalaried(employee);
             } else {
                 employees[id] = employees[id].HourlyToComissioned(employee);
-            }
-        } else {
-            Comissioned employee = (Comissioned) employees[id];
-            
-            System.out.println("(1) - Salariado");
-            System.out.println("(2) - Horista");
-            int op = Input.readInt();
-
-            if (op == 1) {
-                employees[id] = employees[id].ComissionedToSalaried(employee);
-            } else {
-                employees[id] = employees[id].ComissionedToHourly(employee);
             }
         }
     }
