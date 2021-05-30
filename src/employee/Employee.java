@@ -1,13 +1,12 @@
 package src.employee;
 
-import java.util.Scanner;
+import src.utilities.Input;
 
 public class Employee {
     protected String name;
     protected String address;
     protected int card;
     protected String paymentMethod;
-    private Scanner input = new Scanner(System.in);
 
     public Employee(String name, String address, int card, int paymentMethod) {
         this.name = name;
@@ -65,7 +64,7 @@ public class Employee {
 
     public Hourly SalariedToHourly (Salaried employee) {
         System.out.println("Insira o valor do coeficiente salario/hora: ");
-        double hourSalary = input.nextDouble();
+        double hourSalary =  Input.readDouble();
         int method;
         if (employee.paymentMethod == "hand") {
             method = 1;
@@ -80,7 +79,7 @@ public class Employee {
 
     public Hourly ComissionedToHourly (Comissioned employee) {
         System.out.println("Insira o valor do coeficiente salario/hora: ");
-        double hourSalary = input.nextDouble();
+        double hourSalary =  Input.readDouble();
         int method;
         if (employee.paymentMethod == "hand") {
             method = 1;
@@ -95,7 +94,7 @@ public class Employee {
 
     public Salaried HourlyToSalaried (Hourly employee) {
         System.out.println("Qual será o salário inicial?");
-        double salary = input.nextDouble();
+        double salary =  Input.readDouble();
         int method;
         if (employee.paymentMethod == "hand") {
             method = 1;
@@ -112,13 +111,13 @@ public class Employee {
         System.out.println("O salário atual é: " + employee.getSalary() + " deseja manter?");
         System.out.println("(1) - Sim");
         System.out.println("(2) - Não");
-        int ans = input.nextInt();
+        int ans = Input.readInt();
         double newSalary;
         if (ans == 1) {
             newSalary = employee.getSalary();
         } else {
             System.out.println("Qual será o novo salário?");
-            newSalary = input.nextDouble();
+            newSalary =  Input.readDouble();
         }
 
         int method;
@@ -137,13 +136,13 @@ public class Employee {
         System.out.println("O salário atual é: " + employee.getSalary() + " deseja manter?");
         System.out.println("(1) - Sim");
         System.out.println("(2) - Não");
-        int ans = input.nextInt();
+        int ans = Input.readInt();
         double newSalary;
         if (ans == 1) {
             newSalary = employee.getSalary();
         } else {
             System.out.println("Qual será o novo salário?");
-            newSalary = input.nextDouble();
+            newSalary =  Input.readDouble();
         }
 
         int method;
@@ -156,14 +155,14 @@ public class Employee {
         }
 
         System.out.println("Qual a taxa de comissão?");
-        double taxa = input.nextDouble();
+        double taxa =  Input.readDouble();
 
         return new Comissioned(employee.name, employee.address, employee.card, method, newSalary, taxa);
     }
 
     public Comissioned HourlyToComissioned (Hourly employee) {
         System.out.println("Qual será o salário inicial?");
-        double salary = input.nextDouble();
+        double salary =  Input.readDouble();
         int method;
         if (employee.paymentMethod == "hand") {
             method = 1;
@@ -174,7 +173,7 @@ public class Employee {
         }
 
         System.out.println("Qual a taxa de comissão?");
-        double taxa = input.nextDouble();
+        double taxa =  Input.readDouble();
         return new Comissioned(employee.name, employee.address, employee.card, method, salary, taxa);
     }
 }

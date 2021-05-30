@@ -2,6 +2,7 @@ package src.employee;
 
 import java.util.Scanner;
 
+import src.utilities.Input;
 import src.utilities.Sale;
 
 public class EmployeeList {
@@ -92,25 +93,25 @@ public class EmployeeList {
         System.out.println("Que tipo de empregado " + name + " será?");
         System.out.println("(1) - Horista");
         System.out.println("(2) - Assalariado");
-        int type = input.nextInt();
+        int type = Input.readInt();
         
         if (type == 1) {
             System.out.println("Insira o valor do coeficiente salario/hora: ");
-            double hourSalary = input.nextDouble();
+            double hourSalary =  Input.readDouble();
             this.employees[id] = new Hourly(name, address, id, payment, hourSalary);
         } else {
             int comissioned;
             System.out.println("Será um empregado comissionado?");
             System.out.println("(1) - Sim");
             System.out.println("(2) - Não");
-            comissioned = input.nextInt();
+            comissioned = Input.readInt();
             
             System.out.println("Qual será o salário inicial?");
-            double salary = input.nextDouble();
+            double salary =  Input.readDouble();
             
             if (comissioned == 1) {
                 System.out.println("Qual a taxa de comissão?");
-                double taxa = input.nextDouble();
+                double taxa =  Input.readDouble();
                 this.employees[id] = new Comissioned(name, address, id, payment, salary, taxa);
             } else {
                 this.employees[id] = new Salaried(name, address, id, payment, salary);
@@ -143,7 +144,7 @@ public class EmployeeList {
             
             System.out.println("(1) - Horista");
             System.out.println("(2) - Comissionado");
-            int op = input.nextInt();
+            int op = Input.readInt();
 
             if (op == 1) {
                 employees[id] = employees[id].SalariedToHourly(employee);
@@ -156,7 +157,7 @@ public class EmployeeList {
             
             System.out.println("(1) - Salariado");
             System.out.println("(2) - Comissionado");
-            int op = input.nextInt();
+            int op = Input.readInt();
 
             if (op == 1) {
                 employees[id] = employees[id].HourlyToSalaried(employee);
@@ -168,7 +169,7 @@ public class EmployeeList {
             
             System.out.println("(1) - Salariado");
             System.out.println("(2) - Horista");
-            int op = input.nextInt();
+            int op = Input.readInt();
 
             if (op == 1) {
                 employees[id] = employees[id].ComissionedToSalaried(employee);

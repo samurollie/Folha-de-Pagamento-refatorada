@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import src.utilities.Input;
+
 public class Syndicate {
     protected double syndicalCharge;
     protected ArrayList<ServiceCharge> serviceCharges;
@@ -39,8 +41,8 @@ public class Syndicate {
 
     public void addServiceCharge() {
         System.out.println("Insira a Porcentagem: ");
-        double value = input.nextDouble();
-        input.nextLine();
+        double value =  Input.readDouble();
+         
 
         System.out.println("Insira a descrição dessa taxa: ");
         String description = input.nextLine();

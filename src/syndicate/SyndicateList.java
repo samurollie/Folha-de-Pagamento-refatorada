@@ -3,13 +3,12 @@ package src.syndicate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Scanner;
 
 import src.employee.Employee;
+import src.utilities.Input;
 
 public class SyndicateList {
     private HashMap<Employee, Syndicate> employeeList; // Lista dos empregados que fazem parte do sindicato
-    private Scanner input = new Scanner(System.in);
     private Random random = new Random();
 
     public SyndicateList() {
@@ -33,7 +32,7 @@ public class SyndicateList {
             System.out.println("Esse empregado já faz parte do sindicato!");
         } else {
             System.out.println("Insira a taxa sindical para " + employee.getName());
-            double syndicalCharge = input.nextDouble();
+            double syndicalCharge =  Input.readDouble();
             employeeList.put(employee, new Syndicate(syndicalCharge, employeeList.size() + 1));
             System.out.println("Empregado adicionado ao sindicato!");
         }

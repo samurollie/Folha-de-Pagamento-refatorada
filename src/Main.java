@@ -2,8 +2,6 @@ package src;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,19 +11,18 @@ import src.employee.EmployeeList;
 import src.employee.Hourly;
 import src.historic.HistoricControll;
 import src.syndicate.SyndicateList;
+import src.utilities.Input;
 
 public class Main {
     public static void main(String[] args) {
         Random randInt = new Random();
         Scanner input = new Scanner(System.in);
         HistoricControll historic = new HistoricControll();
-        Calendar calendar = Calendar.getInstance();
-        Locale local = new Locale("pt", "BR");
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
         System.out.println("Bem-vindo!");
         System.out.println("Insira a quantidade inicial de empregados: ");
-        int maxCapacity = input.nextInt();
+        int maxCapacity = Input.readInt();
         EmployeeList employees = new EmployeeList(maxCapacity);
         SyndicateList syndicate = new SyndicateList();
 
@@ -42,8 +39,8 @@ public class Main {
             System.out.println("(9) - Agenda de Pagamento");
             System.out.println("(10) - Criar novas agendas de pagamento");
             System.out.println("(11) - Sair");
-            int cmd = input.nextInt();
-            input.nextLine();
+            int cmd = Input.readInt();
+             
 
             if (cmd <= 7){
                 System.out.println("Adicionando a ação: " + cmd);
@@ -57,7 +54,7 @@ public class Main {
                 if (employees.listSize() >= maxCapacity) {
                     System.out.println(
                             "Capacidade máxima de empregados alcançada! Deseja aumentar em quantos empregados?");
-                    int newSize = input.nextInt();
+                    int newSize = Input.readInt();
                     maxCapacity += newSize;
                     employees.resize(maxCapacity);
                 }
@@ -72,7 +69,7 @@ public class Main {
                 System.out.println("(1) - Em mãos");
                 System.out.println("(2) - Depósito bancário");
                 System.out.println("(3) - Cheque pelos correios");
-                int payment = input.nextInt();
+                int payment = Input.readInt();
 
                 System.out.println("Gerando o nº do cartão...");
                 int id = randInt.nextInt(maxCapacity); // Gera um número aletório de 0 a maxCapacity
@@ -84,7 +81,7 @@ public class Main {
                 System.out.println("Deseja fazer parte do sindicato?");
                 System.out.println("(1) - Sim");
                 System.out.println("(2) - Não");
-                int isOnSyndicate = input.nextInt();
+                int isOnSyndicate = Input.readInt();
 
                 if (isOnSyndicate == 1) {
                     syndicate.addEmployee(employees.getEmployee(id));
@@ -94,14 +91,14 @@ public class Main {
             case 2:
 
                 System.out.println("Insira o nº de identificação do empregado que deseja remover...");
-                int number = input.nextInt();
+                int number = Input.readInt();
                 syndicate.removeEmployee(employees.getEmployee(number));
                 employees.removeEmployee(number);
                 break;
             case 3:
                 System.out.println("Insira o id do empregado...");
-                id = input.nextInt();
-                input.nextLine();
+                id = Input.readInt();
+                 
 
                 if(employees.containsId(id) && employees.getEmployee(id) instanceof Hourly) {
                     System.out.println("Insira a hora de entrada no formato dd/MM/yyyy hh:mm:ss");
@@ -118,8 +115,8 @@ public class Main {
                 break;
             case 4:
                 System.out.println("Insira o nº de identificação do empregado para registrar venda...");
-                id = input.nextInt();
-                input.nextLine();
+                id = Input.readInt();
+                 
 
                 if(employees.containsId(id)) {
                     if(!(employees.getEmployee(id) instanceof Comissioned)) {
@@ -132,7 +129,7 @@ public class Main {
                         String description = input.nextLine();
 
                         System.out.println("Insira o valor de " + description);
-                        double value = input.nextDouble();
+                        double value =  Input.readDouble();
                         
                         System.out.println("Cadastrando venda...");
 
@@ -151,7 +148,7 @@ public class Main {
                 break;
             case 5:
                 System.out.println("Insira o nº de identificacao do empregado que deseja adicionar uma taxa:");
-                id = input.nextInt();
+                id = Input.readInt();
 
                 if (syndicate.containsEmployee(employees.getEmployee(id))) {
                     syndicate.addSyndicalCharge(employees.getEmployee(id));
@@ -161,7 +158,7 @@ public class Main {
                 break;
             case 6:
                 System.out.println("Insira o nº de identificação do empregado que deseja alterar algum dado...");
-                id = input.nextInt();
+                id = Input.readInt();
 
                 if (employees.containsId(id)) {
                     while (true) {
@@ -186,8 +183,8 @@ public class Main {
                             System.out.println("(5) - Adicionar ao Sindicato");
                         }
     
-                        int change = input.nextInt();
-                        input.nextLine();
+                        int change = Input.readInt();
+                         
     
                         if (change == 1) {
                             System.out.println("Insira o novo nome:");
@@ -204,7 +201,7 @@ public class Main {
                             System.out.println("(1) - Em mãos");
                             System.out.println("(2) - Depósito bancário");
                             System.out.println("(3) - Cheque pelos correios");
-                            int newPayment = input.nextInt();
+                            int newPayment = Input.readInt();
                             employees.getEmployee(id).setPaymentMethod(newPayment);
                         } else {
                             if (syndicate.containsEmployee(employees.getEmployee(id))) {
@@ -214,7 +211,7 @@ public class Main {
                                     syndicate.changeId(employee);
                                 } else if (change == 7) {
                                     System.out.println("Insira a nova taxa sindical:");
-                                    double newSyndicalCharge = input.nextDouble();
+                                    double newSyndicalCharge =  Input.readDouble();
                                     syndicate.getSyndicate(employee).setsyndicalCharge(newSyndicalCharge);
                                 } else {
                                     System.out.println("Opção inválida!");
@@ -230,7 +227,7 @@ public class Main {
                         System.out.println("Deseja alterar mais alguma coisa?");
                         System.out.println("(1) - Sim");
                         System.out.println("(2) - Não");
-                        int continuar = input.nextInt();
+                        int continuar = Input.readInt();
     
                         if (continuar == 2) {
                             break;
@@ -248,7 +245,7 @@ public class Main {
             case 8:
                 System.out.println("(1) - Undo");
                 System.out.println("(2) - Redo");
-                int option = input.nextInt();
+                int option = Input.readInt();
 
                 if (option == 1) {
                     int lastAction = historic.undoAction();
@@ -298,7 +295,7 @@ public class Main {
                 break;
             }
 
-            input.nextLine();
+             
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
         }

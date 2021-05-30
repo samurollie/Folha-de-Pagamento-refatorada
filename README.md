@@ -1,5 +1,7 @@
 # Sistema de Folha de Pagamento
 
+## Especificações
+
 O objetivo do projeto é construir um sistema de folha de pagamento. O sistema consiste do
 gerenciamento de pagamentos dos empregados de uma empresa. Além disso, o sistema deve
 gerenciar os dados destes empregados, a exemplo os cartões de pontos. Empregados devem receber
@@ -37,3 +39,67 @@ identificação no sistema de folha de pagamento.
 * A folha de pagamento é rodada todo dia e deve pagar os empregados cujos salários vencem
 naquele dia. O sistema receberá a data até a qual o pagamento deve ser feito e calculará o
 pagamento para cada empregado desde a última vez em que este foi pago.
+
+
+## Code Smells encontrados no projeto
+
+### Duplicated Code
+
+1) Na classe Main, assim como nas classes Employee, EmployeeList, Salaried, Syndicate e SyndicateList, toda vez que um número (Inteiro,double, etc) é lido logo após uma String será lida, o método nextLine() é chamado para a limpeza do buff e a correta leitura da String
+
+*
+
+## Solução para os Code Smells encontrados
+
+### Duplicated Code
+
+Para o problema de leitura, foi criada a Classe Input (ADICIONAR LINK), esta classe contém metodos com o código que antes estava duplicado:
+
+```java
+public class Input {
+    private static Scanner input = new Scanner(System.in);
+
+    public static int readInt() {
+        int n = input.nextInt();
+        input.nextLine();
+        return n;
+    }
+
+    public static double readDouble() {
+        double n = input.nextDouble();
+        input.nextLine();
+        return n;
+    }
+
+    public static String readString() {
+        String n = input.nextLine();
+        return n;
+    }    
+}
+```
+
+Alguns exemplos:
+
+(Antes, arquivo main.java linhas 45 e 46)
+```java
+int cmd = input.nextInt();
+input.nextLine();
+```
+
+(Depois)
+```java
+int cmd = Input.readInt();
+```
+
+---
+(Antes, arquivo syndicate.java, linhas 42 e 43)
+
+```java
+double value = input.nextDouble();
+input.nextLine();
+```
+
+(Depois)
+```java
+double value =  Input.readDouble();
+```

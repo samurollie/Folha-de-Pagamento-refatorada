@@ -35,6 +35,6 @@ public class Salaried extends Employee{
         System.out.println("Será um empregado comissionado?");
         System.out.println("(1) - Sim");
         System.out.println("(2) - Não");
-        int comissioned = input.nextInt();
+        int comissioned = Input.readInt();
     } */
 }

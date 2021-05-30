@@ -12,7 +12,7 @@ public class Input {
     }
 
     public static double readDouble() {
-        double n = input.nextDouble();
+        double n =  Input.readDouble();
         input.nextLine();
         return n;
     }
