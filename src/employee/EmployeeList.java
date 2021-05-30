@@ -131,16 +131,15 @@ public class EmployeeList {
         System.out.println("Para qual tipo você deseja converter?");
         
         if (employees[id] instanceof Salaried) {
-            Salaried employee = (Salaried) employees[id];
-            if (employee.getComissionPercentage() > 1) {
+            if (((Salaried) employees[id]).getComissionPercentage() > 1) {
                 System.out.println("(1) - Salariado");
                 System.out.println("(2) - Horista");
                 int op = Input.readInt();
     
                 if (op == 1) {
-                    employees[id] = employees[id].ComissionedToSalaried(employee);
+                    employees[id] = ((Salaried)employees[id]).toSalaried();
                 } else {
-                    employees[id] = employees[id].ComissionedToHourly(employee);
+                    employees[id] = ((Salaried)employees[id]).toHourly();
                 }
             } else {
                 System.out.println("(1) - Horista");
@@ -148,24 +147,23 @@ public class EmployeeList {
                 int op = Input.readInt();
                 
                 if (op == 1) {
-                    employees[id] = employees[id].SalariedToHourly(employee);
+                    employees[id] = ((Salaried)employees[id]).toHourly();
                 } else {
-                    employees[id] = employees[id].SalariedToComissioned(employee);
+                    employees[id] = ((Salaried)employees[id]).toComissioned();
                 }
             }
             
             
-        } else if (employees[id] instanceof Hourly) {
-            Hourly employee = (Hourly) employees[id];
-            
+        } else if (employees[id] instanceof Hourly) {            
             System.out.println("(1) - Salariado");
             System.out.println("(2) - Comissionado");
             int op = Input.readInt();
 
             if (op == 1) {
-                employees[id] = employees[id].HourlyToSalaried(employee);
+                employees[id] = ((Hourly)employees[id]).toSalaried();
+
             } else {
-                employees[id] = employees[id].HourlyToComissioned(employee);
+                employees[id] = ((Hourly)employees[id]).toComissioned();
             }
         }
     }

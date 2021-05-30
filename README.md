@@ -49,6 +49,8 @@ pagamento para cada empregado desde a última vez em que este foi pago.
 
 2) O método `ShowEmployeeInfo()` da Classe Employee e das suas subclasses é identico até certo ponto, logo deve ser organizado.
 
+3) Os métodos de conversão de Employee, `SalariedToHourly(), ComissionedToHourly(), HourlyToSalaried(), ComissionedToSalaried()` e `SalariedToComissioned()` da classe [Employee](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/employee/Employee.java#L66)
+
 ### Lazy Class
 
 1) A classe [Salaried](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Salaried.java) possui apenas uma subclasse, [Comissioned](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Comissioned.java) logo, a existência dessa subclasse não faz sentido

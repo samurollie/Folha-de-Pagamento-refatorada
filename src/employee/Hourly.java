@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import src.utilities.Input;
 import src.utilities.Timecard;
 
 public class Hourly extends Employee{
@@ -47,6 +48,23 @@ public class Hourly extends Employee{
         }
     }
 
+    public Salaried toSalaried () {
+        System.out.println("Qual será o salário inicial?");
+        double salary = Input.readDouble();
+
+        return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), salary, 1);
+    }
+
+    public Salaried toComissioned () {
+        System.out.println("Qual será o salário inicial?");
+        double salary =  Input.readDouble();
+
+        System.out.println("Qual a taxa de comissão?");
+        double taxa =  Input.readDouble();
+
+        return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), salary, taxa);
+    }
+
     @Override
     public String showEmployeeInfo() {
         return "----------\n"+ 
@@ -58,9 +76,4 @@ public class Hourly extends Employee{
         "\nSalario/Hora:" + this.hourSalary +
         "\n----------";
     }
-
-    /* @Override
-    public Hourly add() {
-        return ;
-    } */
 }
