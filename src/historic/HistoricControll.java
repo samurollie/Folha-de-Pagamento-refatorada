@@ -32,21 +32,6 @@ public class HistoricControll {
         }
     }
 
-    public void showStatus() {
-        try {
-            System.out.println("Employees:");
-            EmployeeList aux = this.employee.getAtual();
-            aux.showAll();
-
-            System.out.println("Syndicate :");
-            SyndicateList temp = this.syndicate.getAtual();
-            temp.showAll();
-        } catch (NullPointerException e) {
-            System.out.println("Não há nada para ser printado!");
-        }
-        
-    }
-
     public EmployeeList undoEmployeeList() {
         return this.employee.undo();
     }

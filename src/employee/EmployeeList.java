@@ -6,24 +6,17 @@ import src.utilities.Sale;
 
 public class EmployeeList {
     private Employee employees[];
-    /* private Salaried salaried[];
-    private Hourly hourly[];
-    private Comissioned comissioned[]; */
     private int maxCapacity;
     private Scanner input = new Scanner(System.in);
-    public static int size;
+    private static int size;
 
     public EmployeeList(int maxCapacity) {
         this.maxCapacity = maxCapacity;
         this.employees = new Employee[maxCapacity];
-        /* this.salaried = new Salaried[maxCapacity];
-        this.comissioned = new Comissioned[maxCapacity];
-        this.hourly = new Hourly[maxCapacity]; */
         EmployeeList.size = 0;
     }
 
     public static EmployeeList copy(EmployeeList employeeList) {
-        int oldSize = EmployeeList.size;
         EmployeeList newList = new EmployeeList(employeeList.maxCapacity);
         for(int i = 0; i < employeeList.employees.length; i++) {
             
@@ -52,11 +45,11 @@ public class EmployeeList {
                 newList.employees[i] = new Salaried(aux.name, aux.address, aux.card, aux.getPaymentMethod(), aux.getSalary());
             }
         }
-        EmployeeList.size = oldSize;
+
         return newList;
     }
 
-    public void showAll() {
+    public void showAllEmployees() {
         for (Employee employee : employees) {
             if (employee == null) 
                 continue;
@@ -69,7 +62,7 @@ public class EmployeeList {
 
     /* Função que verifica se existe algum empregado com aquele ID */
     public boolean containsId(int id) {
-        if (getEmployee(id) != null) {
+        if (id < maxCapacity && employees[id] != null) {
             return true;
         } else {
             return false;
@@ -77,21 +70,12 @@ public class EmployeeList {
     }
 
     public Employee getEmployee(int index) {
-        /* if (this.hourly[index] != null) {
-            return this.hourly[index];
-        } else if (this.comissioned[index] != null) {
-            return this.comissioned[index];
-        } else if (this.salaried[index] != null) {
-            return this.salaried[index];
-        } else {
-            return null;
-        } */
         return this.employees[index];
     }
 
-    // public int listSize() {
-    //     return EmployeeList.size;
-    // }
+    public int listSize() {
+        return EmployeeList.size;
+    }
     
     public void resize(int newSize) {
         System.out.printf("Antigo tamanho: %d\n", this.employees.length);
@@ -134,10 +118,10 @@ public class EmployeeList {
         }
 
         System.out.println("Adicionando empregado " + id);
-        EmployeeList.size += 1;
 
         System.out.println("Empregado adicionado!\n");
         System.out.println(this.employees[id].showEmployeeInfo());
+        EmployeeList.size++;
     }
 
     public void removeEmployee(int id) {

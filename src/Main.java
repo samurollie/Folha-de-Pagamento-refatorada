@@ -2,6 +2,8 @@ package src;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,6 +19,8 @@ public class Main {
         Random randInt = new Random();
         Scanner input = new Scanner(System.in);
         HistoricControll historic = new HistoricControll();
+        Calendar calendar = Calendar.getInstance();
+        Locale local = new Locale("pt", "BR");
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
         System.out.println("Bem-vindo!");
@@ -38,23 +42,22 @@ public class Main {
             System.out.println("(9) - Agenda de Pagamento");
             System.out.println("(10) - Criar novas agendas de pagamento");
             System.out.println("(11) - Sair");
-            int cmd = readInt(input);
+            int cmd = input.nextInt();
+            input.nextLine();
 
             if (cmd <= 7){
                 System.out.println("Adicionando a ação: " + cmd);
                 EmployeeList aux = EmployeeList.copy(employees);
                 SyndicateList aux2 = new SyndicateList(syndicate);
                 historic.addAction(cmd, aux, aux2);
-                // historic.showStatus();
             }
 
             switch (cmd) {
             case 1:
-                System.out.println("list size:" + EmployeeList.size);
-                if (EmployeeList.size >= maxCapacity) {
+                if (employees.listSize() >= maxCapacity) {
                     System.out.println(
                             "Capacidade máxima de empregados alcançada! Deseja aumentar em quantos empregados?");
-                    int newSize = readInt(input);
+                    int newSize = input.nextInt();
                     maxCapacity += newSize;
                     employees.resize(maxCapacity);
                 }
@@ -69,7 +72,7 @@ public class Main {
                 System.out.println("(1) - Em mãos");
                 System.out.println("(2) - Depósito bancário");
                 System.out.println("(3) - Cheque pelos correios");
-                int payment = readInt(input);
+                int payment = input.nextInt();
 
                 System.out.println("Gerando o nº do cartão...");
                 int id = randInt.nextInt(maxCapacity); // Gera um número aletório de 0 a maxCapacity
@@ -81,7 +84,7 @@ public class Main {
                 System.out.println("Deseja fazer parte do sindicato?");
                 System.out.println("(1) - Sim");
                 System.out.println("(2) - Não");
-                int isOnSyndicate = readInt(input);
+                int isOnSyndicate = input.nextInt();
 
                 if (isOnSyndicate == 1) {
                     syndicate.addEmployee(employees.getEmployee(id));
@@ -91,13 +94,14 @@ public class Main {
             case 2:
 
                 System.out.println("Insira o nº de identificação do empregado que deseja remover...");
-                int number = readInt(input);
+                int number = input.nextInt();
                 syndicate.removeEmployee(employees.getEmployee(number));
                 employees.removeEmployee(number);
                 break;
             case 3:
                 System.out.println("Insira o id do empregado...");
-                id = readInt(input);
+                id = input.nextInt();
+                input.nextLine();
 
                 if(employees.containsId(id) && employees.getEmployee(id) instanceof Hourly) {
                     System.out.println("Insira a hora de entrada no formato dd/MM/yyyy hh:mm:ss");
@@ -114,7 +118,8 @@ public class Main {
                 break;
             case 4:
                 System.out.println("Insira o nº de identificação do empregado para registrar venda...");
-                id = readInt(input);
+                id = input.nextInt();
+                input.nextLine();
 
                 if(employees.containsId(id)) {
                     if(!(employees.getEmployee(id) instanceof Comissioned)) {
@@ -146,7 +151,7 @@ public class Main {
                 break;
             case 5:
                 System.out.println("Insira o nº de identificacao do empregado que deseja adicionar uma taxa:");
-                id = readInt(input);
+                id = input.nextInt();
 
                 if (syndicate.containsEmployee(employees.getEmployee(id))) {
                     syndicate.addSyndicalCharge(employees.getEmployee(id));
@@ -156,7 +161,7 @@ public class Main {
                 break;
             case 6:
                 System.out.println("Insira o nº de identificação do empregado que deseja alterar algum dado...");
-                id = readInt(input);
+                id = input.nextInt();
 
                 if (employees.containsId(id)) {
                     while (true) {
@@ -181,7 +186,8 @@ public class Main {
                             System.out.println("(5) - Adicionar ao Sindicato");
                         }
     
-                        int change = readInt(input);
+                        int change = input.nextInt();
+                        input.nextLine();
     
                         if (change == 1) {
                             System.out.println("Insira o novo nome:");
@@ -198,7 +204,7 @@ public class Main {
                             System.out.println("(1) - Em mãos");
                             System.out.println("(2) - Depósito bancário");
                             System.out.println("(3) - Cheque pelos correios");
-                            int newPayment = readInt(input);
+                            int newPayment = input.nextInt();
                             employees.getEmployee(id).setPaymentMethod(newPayment);
                         } else {
                             if (syndicate.containsEmployee(employees.getEmployee(id))) {
@@ -224,7 +230,7 @@ public class Main {
                         System.out.println("Deseja alterar mais alguma coisa?");
                         System.out.println("(1) - Sim");
                         System.out.println("(2) - Não");
-                        int continuar = readInt(input);
+                        int continuar = input.nextInt();
     
                         if (continuar == 2) {
                             break;
@@ -242,24 +248,24 @@ public class Main {
             case 8:
                 System.out.println("(1) - Undo");
                 System.out.println("(2) - Redo");
-                int option = readInt(input);
+                int option = input.nextInt();
 
                 if (option == 1) {
                     int lastAction = historic.undoAction();
                     System.out.printf("\nLast Action: %d\n", lastAction);
 
                     if (lastAction == 1 || lastAction == 2 || lastAction == 3 || lastAction == 4 || lastAction == 6) {
-                        System.out.println("Employees antes: " + EmployeeList.size);
-                        employees.showAll();
+                        System.out.println("Employees antes: " + employees.listSize());
+                        employees.showAllEmployees();
 
                         System.out.println("A lista la do historico:");
                         EmployeeList temp = historic.undoEmployeeList();
-                        temp.showAll();
+                        temp.showAllEmployees();
 
                         employees = temp;
 
-                        System.out.println("Employees depois: " + EmployeeList.size);
-                        employees.showAll();
+                        System.out.println("Employees depois: " + employees.listSize());
+                        employees.showAllEmployees();
                     } else if (lastAction == 5) {
                         syndicate = historic.undoSyndicateList();
                     }
@@ -292,6 +298,7 @@ public class Main {
                 break;
             }
 
+            input.nextLine();
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
         }

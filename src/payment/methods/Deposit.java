@@ -5,24 +5,17 @@ public class Deposit {
     private int accountNumber;
     private int bankNumber;
     private double value;
-    private int cpf;
-    
-    public Deposit(int agencyNumber, int accountNumber, int bankNumber, int cpf) {
-        this.agencyNumber = agencyNumber;
-        this.accountNumber = accountNumber;
-        this.bankNumber = bankNumber;
-        this.cpf = cpf;
-    }
+    private String cpf;
 
     public int getAccountNumber() {
         return accountNumber;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
