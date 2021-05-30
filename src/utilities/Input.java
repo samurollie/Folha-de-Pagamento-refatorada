@@ -1,19 +1,38 @@
 package src.utilities;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Input {
     private static Scanner input = new Scanner(System.in);
 
     public static int readInt() {
-        int n = input.nextInt();
-        input.nextLine();
+        Boolean completed = false;
+        int n = 0;
+        while(!completed) {
+            try {
+                n = input.nextInt();
+                completed = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Insira um número inteiro!");
+            }
+            input.nextLine();
+        }
         return n;
     }
 
     public static double readDouble() {
-        double n =  Input.readDouble();
-        input.nextLine();
+        Boolean completed = false;
+        double n = 0;
+        while(!completed) {
+            try {
+                n = input.nextInt();
+                completed = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Insira um número racional!");
+            }
+            input.nextLine();
+        }
         return n;
     }
 

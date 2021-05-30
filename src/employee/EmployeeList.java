@@ -9,7 +9,7 @@ public class EmployeeList {
     private Employee employees[];
     private int maxCapacity;
     private Scanner input = new Scanner(System.in);
-    private static int size;
+    public static int size;
 
     public EmployeeList(int maxCapacity) {
         this.maxCapacity = maxCapacity;
@@ -18,6 +18,7 @@ public class EmployeeList {
     }
 
     public static EmployeeList copy(EmployeeList employeeList) {
+        int oldSize = EmployeeList.size;
         EmployeeList newList = new EmployeeList(employeeList.maxCapacity);
         for(int i = 0; i < employeeList.employees.length; i++) {
             
@@ -46,11 +47,11 @@ public class EmployeeList {
                 newList.employees[i] = new Salaried(aux.name, aux.address, aux.card, aux.getPaymentMethod(), aux.getSalary());
             }
         }
-
+        EmployeeList.size = oldSize;
         return newList;
     }
 
-    public void showAllEmployees() {
+    public void showAll() {
         for (Employee employee : employees) {
             if (employee == null) 
                 continue;
@@ -72,10 +73,6 @@ public class EmployeeList {
 
     public Employee getEmployee(int index) {
         return this.employees[index];
-    }
-
-    public int listSize() {
-        return EmployeeList.size;
     }
     
     public void resize(int newSize) {
