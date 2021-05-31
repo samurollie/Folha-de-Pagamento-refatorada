@@ -100,26 +100,26 @@ public class Input {
 
 Alguns exemplos:
 
-(Antes, arquivo [Main.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java#L45))
+- ANTES ([Main.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java#L45))
 ```java
 int cmd = input.nextInt();
 input.nextLine();
 ```
 
-(Depois)
+- DEPOIS
 ```java
 int cmd = Input.readInt();
 ```
 
 ---
-(Antes, arquivo [Syndicate.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/syndicate/Syndicate.java#L42))
+- ANTES ([Syndicate.java](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/syndicate/Syndicate.java#L42))
 
 ```java
 double value = input.nextDouble();
 input.nextLine();
 ```
 
-(Depois)
+- DEPOIS
 ```java
 double value =  Input.readDouble();
 ```
@@ -181,7 +181,7 @@ double value =  Input.readDouble();
     }
 ```
 
-3) Aqui foi aplicado o Padrão **State**. A interface PaymentMethod(LINK) foi criada e as classes Deposit, HandCheck e HandMail, que antes não tinham função passaram a implementar essa interface, solucionando o Code Smell Speculative Generality e Data Class
+3) Aqui foi aplicado o Padrão **State**. A interface [PaymentMethod](https://github.com/samurollie/Folha-de-Pagamento-refatorada/blob/main/src/payment/methods/PaymentMethod.java) foi criada e as classes Deposit, HandCheck e HandMail, que antes não tinham função passaram a implementar essa interface, solucionando o Code Smell Speculative Generality e Data Class
 
 - ANTES (Employee.java):
 ```java
@@ -254,9 +254,125 @@ public class Employee {
 
 1) Aqui foi aplicado o padrão **Extract Method**, ou seja, as Funções foram levadas cada uma para sua respectiva Classe de interesse.
 
-(Antes)
+- ANTES (Employee.Java)
+```java
+    public Hourly SalariedToHourly (Salaried employee) {
+        System.out.println("Insira o valor do coeficiente salario/hora: ");
+        double hourSalary = input.nextDouble();
+        int method;
+        if (employee.paymentMethod == "hand") {
+            method = 1;
+        } else if (employee.paymentMethod == "deposit") {
+            method = 2;
+        } else {
+            method = 3;
+        }
+        
+        return new Hourly(employee.name, employee.address, employee.card, method, hourSalary);
+    }
 
-(Depois, Hourly.java)
+    public Hourly ComissionedToHourly (Comissioned employee) {
+        System.out.println("Insira o valor do coeficiente salario/hora: ");
+        double hourSalary = input.nextDouble();
+        int method;
+        if (employee.paymentMethod == "hand") {
+            method = 1;
+        } else if (employee.paymentMethod == "deposit") {
+            method =  2;
+        } else {
+            method = 3;
+        }
+        
+        return new Hourly(employee.name, employee.address, employee.card, method, hourSalary);
+    }
+
+    public Salaried HourlyToSalaried (Hourly employee) {
+        System.out.println("Qual será o salário inicial?");
+        double salary = input.nextDouble();
+        int method;
+        if (employee.paymentMethod == "hand") {
+            method = 1;
+        } else if (employee.paymentMethod == "deposit") {
+            method =  2;
+        } else {
+            method = 3;
+        }
+
+        return new Salaried(employee.name, employee.address, employee.card, method, salary);
+    }
+
+    public Salaried ComissionedToSalaried (Comissioned employee) {
+        System.out.println("O salário atual é: " + employee.getSalary() + " deseja manter?");
+        System.out.println("(1) - Sim");
+        System.out.println("(2) - Não");
+        int ans = input.nextInt();
+        double newSalary;
+        if (ans == 1) {
+            newSalary = employee.getSalary();
+        } else {
+            System.out.println("Qual será o novo salário?");
+            newSalary = input.nextDouble();
+        }
+
+        int method;
+        if (employee.paymentMethod == "hand") {
+            method = 1;
+        } else if (employee.paymentMethod == "deposit") {
+            method =  2;
+        } else {
+            method = 3;
+        }
+
+        return new Salaried(employee.name, employee.address, employee.card, method, newSalary);
+    }
+
+    public Comissioned SalariedToComissioned (Salaried employee) {
+        System.out.println("O salário atual é: " + employee.getSalary() + " deseja manter?");
+        System.out.println("(1) - Sim");
+        System.out.println("(2) - Não");
+        int ans = input.nextInt();
+        double newSalary;
+        if (ans == 1) {
+            newSalary = employee.getSalary();
+        } else {
+            System.out.println("Qual será o novo salário?");
+            newSalary = input.nextDouble();
+        }
+
+        int method;
+        if (employee.paymentMethod == "hand") {
+            method = 1;
+        } else if (employee.paymentMethod == "deposit") {
+            method =  2;
+        } else {
+            method = 3;
+        }
+
+        System.out.println("Qual a taxa de comissão?");
+        double taxa = input.nextDouble();
+
+        return new Comissioned(employee.name, employee.address, employee.card, method, newSalary, taxa);
+    }
+
+    public Comissioned HourlyToComissioned (Hourly employee) {
+        System.out.println("Qual será o salário inicial?");
+        double salary = input.nextDouble();
+        int method;
+        if (employee.paymentMethod == "hand") {
+            method = 1;
+        } else if (employee.paymentMethod == "deposit") {
+            method =  2;
+        } else {
+            method = 3;
+        }
+
+        System.out.println("Qual a taxa de comissão?");
+        double taxa = input.nextDouble();
+        return new Comissioned(employee.name, employee.address, employee.card, method, salary, taxa);
+    }
+```
+
+- DEPOIS (Hourly.java)
 ```java
 public Salaried toSalaried () {
     System.out.println("Qual será o salário inicial?");
@@ -275,7 +391,7 @@ public Salaried toComissioned () {
     return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), salary, taxa);
 }
 ```
-(Depois, Salaried.Java)
+- DEPOIS (Salaried.Java)
 ```java
 public Hourly toHourly () {
     System.out.println("Insira o valor do coeficiente salario/hora: ");
@@ -285,7 +401,6 @@ public Hourly toHourly () {
 }
 
 public Salaried toSalaried () {
-
     return new Salaried(this.name, this.address, this.card, this.getPaymentMethod(), changeSalary(), 1);
 }
 
@@ -383,3 +498,5 @@ public class Salaried extends Employee{
 
 ```
 
+### Outros
+Além das correções citadas acima, alguns erros menores, como métodos e atributos sem utilidade e insconcistências no código foram corrigidos
