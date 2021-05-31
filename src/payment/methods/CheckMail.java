@@ -5,14 +5,15 @@ public class CheckMail extends CheckHand{
     private String to;
     private String cep;
     private String address;
-    
-    public CheckMail(int number, double value, String destination, String location, String date, String from, String to,
-            String cep, String address) {
-        super(destination);
-        this.setFrom(from);
-        this.setTo(to);
-        this.setCep(cep);
-        this.setAddress(address);
+
+    @Override
+    public int toInt() {
+        return 3;
+    }
+
+    @Override
+    public String toString() {
+        return "Cheque pelos Correios";
     }
 
     public String getAddress() {

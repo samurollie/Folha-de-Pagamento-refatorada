@@ -98,11 +98,7 @@ public class Salaried extends Employee{
 
     @Override
     public String showEmployeeInfo() {
-        return "----------\n"+ 
-        "Nome:" + this.name + 
-        "\nEndereço:" + this.address + 
-        "\nCard:" + this.card + 
-        "\nMétodo de pagamento:" + this.paymentMethod + 
+        return super.showEmployeeInfo() + 
         "\nTipo: " + this.getType() +
         "\nSalario:" + this.salary +
         "\nPorcentagem de Comissão: " + this.comissionPercentage + "(" + this.getType() + ")" +

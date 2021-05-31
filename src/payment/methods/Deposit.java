@@ -1,11 +1,21 @@
 package src.payment.methods;
 
-public class Deposit {
+public class Deposit implements PaymentMethod{
     private int agencyNumber;
     private int accountNumber;
     private int bankNumber;
     private double value;
     private String cpf;
+
+    @Override
+    public int toInt() {
+        return 2;
+    }
+
+    @Override
+    public String toString() {
+        return "Depósito";
+    }
 
     public int getAccountNumber() {
         return accountNumber;

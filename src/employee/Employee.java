@@ -1,12 +1,15 @@
 package src.employee;
 
-import src.utilities.Input;
+import src.payment.methods.CheckHand;
+import src.payment.methods.CheckMail;
+import src.payment.methods.Deposit;
+import src.payment.methods.PaymentMethod;
 
 public class Employee {
     protected String name;
     protected String address;
     protected int card;
-    protected String paymentMethod;
+    protected PaymentMethod paymentMethod;
 
     public Employee(String name, String address, int card, int paymentMethod) {
         this.name = name;
@@ -17,24 +20,18 @@ public class Employee {
 
     public void setPaymentMethod(int method) {
         if (method == 1) {
-            this.paymentMethod = "hand";
+            this.paymentMethod = new CheckHand();
         } else if (method ==  2) {
-            this.paymentMethod = "deposit";
+            this.paymentMethod = new Deposit();
         } else if (method == 3) {
-            this.paymentMethod = "mail";
+            this.paymentMethod = new CheckMail();
         } else {
             System.out.println("Metodo de pagamento inválido!\n");
         }
     }
 
     public int getPaymentMethod() {
-        if (this.paymentMethod.equals("hand")) {
-            return 1;
-        } else if (this.paymentMethod.equals("deposit")) {
-            return 2;
-        } else {
-            return 3;
-        }
+        return this.paymentMethod.toInt();
     }
 
     public String getName() {
@@ -58,7 +55,6 @@ public class Employee {
         "Nome:" + this.name + 
         "\nEndereço:" + this.address + 
         "\nCard:" + this.card + 
-        "\nMétodo de pagamento:" + this.paymentMethod + 
-        "\n----------";
+        "\nMétodo de pagamento:" + this.paymentMethod.toString();
     }
 }

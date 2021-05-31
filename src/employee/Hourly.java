@@ -10,7 +10,7 @@ import src.utilities.Timecard;
 public class Hourly extends Employee{
     private ArrayList<Timecard> timeCards = new ArrayList<Timecard>();
     private double hourSalary;
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
     public Hourly(String name, String adress, int card, int paymentMethod, double hourSalary) {
         super(name, adress, card, paymentMethod);
@@ -67,11 +67,7 @@ public class Hourly extends Employee{
 
     @Override
     public String showEmployeeInfo() {
-        return "----------\n"+ 
-        "Nome:" + this.name + 
-        "\nEndereço:" + this.address + 
-        "\nCard:" + this.card + 
-        "\nMétodo de pagamento:" + this.paymentMethod + 
+        return super.showEmployeeInfo() +
         "\nTipo: Horista"+
         "\nSalario/Hora:" + this.hourSalary +
         "\n----------";

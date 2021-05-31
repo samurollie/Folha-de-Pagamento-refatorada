@@ -1,14 +1,20 @@
 package src.payment.methods;
 
-public class CheckHand {
+public class CheckHand implements PaymentMethod{
     private int number;
     private double value;
     private String destination;
     private String location;
     private String date;
 
-    public CheckHand(String destination) {
-        this.setDestination(destination);
+    @Override
+    public int toInt() {
+        return 1;
+    }
+
+    @Override
+    public String toString() {
+        return "Cheque em Mãos";
     }
 
     public String getDate() {

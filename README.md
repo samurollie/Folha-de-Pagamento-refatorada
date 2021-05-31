@@ -47,11 +47,13 @@ pagamento para cada empregado desde a última vez em que este foi pago.
 
 1) Na classe [Main](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/Main.java), assim como nas classes Employee, EmployeeList, Salaried, Syndicate e SyndicateList, toda vez que um número (Inteiro,double, etc) é lido logo após uma String será lida, o método `nextLine()` é chamado para a limpeza do buff e a correta leitura da String.
 
-2) O método `ShowEmployeeInfo()` da Classe Employee e das suas subclasses é identico até certo ponto, logo deve ser organizado.
+2) O método `ShowEmployeeInfo()` da Classe Employee e das suas subclasses é identico até certo ponto.
+
+3) Como o atributo `paymentMethod` da Classe Employee é salvo como String para melhor visualização, mas em outros pontos do código é tratado como um inteiro, toda vez que esse atributo é utilizado torna-se necessário realizar a conversão da String em Inteiro e Vice-Versa.
 
 ### Feature Envy
 
-1) Os métodos de conversão de Employee, `SalariedToHourly(), ComissionedToHourly(), HourlyToSalaried(), ComissionedToSalaried()` e `SalariedToComissioned()` da classe [Employee](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/employee/Employee.java#L66) estão mais interessados nas subclasses do que na superclasse. Esse problema também se encaixa no Code Smell Duplicated Code, pois o codigo entre esses métodos está repitido.
+1) Os métodos de conversão de Employee, `SalariedToHourly(), ComissionedToHourly(), HourlyToSalaried(), ComissionedToSalaried()` e `SalariedToComissioned()` da classe [Employee](https://github.com/samurollie/Folha-de-Pagamento/blob/0309bd8fd4d68166938542cb3882632fcea88574/src/employee/Employee.java#L66) estão mais interessados nas subclasses do que na superclasse. Esse caso também se encaixa no Code Smell Duplicated Code, pois o codigo entre esses métodos está repitido.
 
 ### Lazy Class
 
@@ -59,7 +61,13 @@ pagamento para cada empregado desde a última vez em que este foi pago.
 
 ### Speculative Generality
 
-1) 
+1) Como o projeto não foi 100% implementado,as classes MyCalendar, Deposit, CheckHand e CheckMail não possuem uma função muito clara. A classe MyCalendar possui nada e as outras possuem apenas alguns atributos, seus construtores e métodos get e set genéricos
+
+### Data Class
+
+1) As classes Deposit, CheckHand e CheckMail possuem apenas atributos, construtores e métodos getters e setters para esses atributos.
+
+2) As classes Timecard e Sale servem apenas para guardar os dados.
 
 ## Solução para os Code Smells encontrados
 
@@ -116,9 +124,135 @@ input.nextLine();
 double value =  Input.readDouble();
 ```
 
+2) Aqui, as partes dos métodos das subclasses que coincidiam com o método da super classe foram substituidas por uma chamada do método da super classe.
+
+- ANTES (Hourly.Java)
+
+```java
+@Override
+    public String showEmployeeInfo() {
+        return "----------\n"+ 
+        "Nome:" + this.name + 
+        "\nEndereço:" + this.address + 
+        "\nCard:" + this.card + 
+        "\nMétodo de pagamento:" + this.paymentMethod + 
+        "\nTipo: Horista"+
+        "\nSalario/Hora:" + this.hourSalary +
+        "\n----------";
+    }
+```
+- DEPOIS (Hourly.Java):
+
+```java
+    @Override
+    public String showEmployeeInfo() {
+        return super.showEmployeeInfo() +
+        "\nTipo: Horista"+
+        "\nSalario/Hora:" + this.hourSalary +
+        "\n----------";
+    }
+```
+
+- ANTES (Salaried.Java):
+```java
+ @Override
+    public String showEmployeeInfo() {
+        return "----------\n"+ 
+        "Nome:" + this.name + 
+        "\nEndereço:" + this.address + 
+        "\nCard:" + this.card + 
+        "\nMétodo de pagamento:" + this.paymentMethod + 
+        "\nTipo: " + this.getType() +
+        "\nSalario:" + this.salary +
+        "\nPorcentagem de Comissão: " + this.comissionPercentage + "(" + this.getType() + ")" +
+        "\n----------";
+    }
+```
+- DEPOIS:
+
+```java
+    @Override
+    public String showEmployeeInfo() {
+        return super.showEmployeeInfo() + 
+        "\nTipo: " + this.getType() +
+        "\nSalario:" + this.salary +
+        "\nPorcentagem de Comissão: " + this.comissionPercentage + "(" + this.getType() + ")" +
+        "\n----------";
+    }
+```
+
+3) Aqui foi aplicado o Padrão **State**. A interface PaymentMethod(LINK) foi criada e as classes Deposit, HandCheck e HandMail, que antes não tinham função passaram a implementar essa interface, solucionando o Code Smell Speculative Generality e Data Class
+
+- ANTES (Employee.java):
+```java
+package src.employee;
+
+public class Employee {
+    protected String name;
+    protected String address;
+    protected int card;
+    protected String paymentMethod;
+
+    public Employee(String name, String address, int card, int paymentMethod) {
+        this.name = name;
+        this.address = address;
+        this.card = card;
+        this.setPaymentMethod(paymentMethod);
+    }
+
+    public void setPaymentMethod(int method) {
+        if (method == 1) {
+            this.paymentMethod = "hand";
+        } else if (method ==  2) {
+            this.paymentMethod = "deposit";
+        } else if (method == 3) {
+            this.paymentMethod = "mail";
+        } else {
+            System.out.println("Metodo de pagamento inválido!\n");
+        }
+    }
+
+    public int getPaymentMethod() {
+        if (this.paymentMethod.equals("hand")) {
+            return 1;
+        } else if (this.paymentMethod.equals("deposit")) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String showEmployeeInfo() {
+        return "----------\n"+ 
+        "Nome:" + this.name + 
+        "\nEndereço:" + this.address + 
+        "\nCard:" + this.card + 
+        "\nMétodo de pagamento:" + this.paymentMethod + 
+        "\n----------";
+    }
+}
+```
+
+
 ### Feature Envy
 
-1) Aqui foi aplicado o padrão "Extract Method", ou seja, as Funções foram levadas cada uma para sua respectiva Classe de interesse.
+1) Aqui foi aplicado o padrão **Extract Method**, ou seja, as Funções foram levadas cada uma para sua respectiva Classe de interesse.
 
 (Antes)
 
@@ -165,11 +299,11 @@ public Salaried toComissioned () {
 
 ### Lazy Class
 
-1) As classes foram unidas, tornando-se uma só:
+1) As classes foram unidas, aplicando o padrão **Extract Class** e tornando-as uma só:
 
-(Antes: [Salaried](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Salaried.java) e [Comissioned](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Comissioned.java))
+- ANTES: ([Salaried](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Salaried.java) e [Comissioned](https://github.com/samurollie/Folha-de-Pagamento/blob/main/src/employee/Comissioned.java))
 
-(Depois) 
+- DEPOIS
 ```java
 package src.employee;
 
